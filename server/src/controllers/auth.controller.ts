@@ -105,11 +105,12 @@ export class AuthController {
             res.cookie("token", idToken, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === "production",
-                sameSite: "none",
-                maxAge: 24 * 60 * 60 * 1000, // 1 día
+                // sameSite: "none",
+                sameSite: "lax",
+                maxAge: 24 * 60 * 60 * 1000, 
             });
 
-            res.json({
+            res.status(200).json({
                 message: "Login successful!",
                 id: localId,
                 email: decodedToken.email,
@@ -143,50 +144,6 @@ export class AuthController {
         }
     }
 
-
-    static async verifyToken(req: Request, res: Response): Promise<void> {
-        try {
-            const { token } = req.cookies;
-
-            if (!token) {
-                res.status(401).json({
-                    code: 'NO_TOKEN_PROVIDED',
-                    message: ERROR_MESSAGES.general.NO_TOKEN_PROVIDED
-                });
-                return;
-            }
-
-            const decodedToken = await auth.verifyIdToken(token);
-            if (!decodedToken) {
-                res.status(401).json({
-                    code: 'INVALID_TOKEN',
-                    message: ERROR_MESSAGES.general.INVALID_TOKEN,
-                });
-                return;
-            }
-
-            res.json({
-                id: decodedToken.uid,
-                email: decodedToken.email,
-                role: decodedToken.rol ?? "customer"
-            });
-        } catch (error: any) {
-            console.error("Token Verification Error:", error);
-
-            if (error.code === 'auth/id-token-expired') {
-                res.status(401).json({
-                    code: 'TOKEN_EXPIRED',
-                    message: ERROR_MESSAGES.general.TOKEN_EXPIRED
-                });
-            } else {
-                res.status(500).json({
-                    code: 'INTERNAL_SERVER_ERROR',
-                    message: ERROR_MESSAGES.general.INTERNAL_SERVER_ERROR
-                });
-            }
-        }
-    }
-
     static async logout(req: Request, res: Response): Promise<void> {
         try {
 
@@ -209,4 +166,14 @@ export class AuthController {
             });
         }
     }
+
+    static async getAuthenticatedUser(req: Request, res: Response): Promise<void> {
+        res.json({
+            id: req.user?.uid,
+            email: req.user?.email,
+            role: req.user?.rol ?? "customer"
+          });
+    }
+
+
 }

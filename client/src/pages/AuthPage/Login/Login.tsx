@@ -15,6 +15,7 @@ import {ERROR_MESSAGES} from '../../../constants/errorMessages';
 import { useGenericContext } from '../../../hooks/useGenericContext';
 import { toastrContext } from '../../../context/ToastrContext';
 import { User } from '../../../types/interfaces/auth';
+import { useNavigate } from 'react-router-dom';
 
 function Login( {setShowLogin} : {setShowLogin: React.Dispatch<React.SetStateAction<boolean>>}) {
   const [showPassword, setShowPassword] = useState(false);
@@ -25,7 +26,7 @@ function Login( {setShowLogin} : {setShowLogin: React.Dispatch<React.SetStateAct
   });
   const passwordValue = watch("password");
   const {showToastr} = useGenericContext(toastrContext);
-
+  const navigate = useNavigate();
 
   const theme = createTheme({
     components: {
@@ -83,9 +84,11 @@ function Login( {setShowLogin} : {setShowLogin: React.Dispatch<React.SetStateAct
   
   const logIn = async (dataUser: User) => {
     try {
-      await logInRequest(dataUser);
+      const responseApi = await logInRequest(dataUser);
+      console.log(responseApi);
       reset();
-      showToastr('Has iniciado sesion', "success");
+      showToastr(responseApi.data.message, "success");
+      navigate('/home')
     } catch (error) {
       if (isAxiosError(error)) {
         console.error("Request error:", error.response?.data.message  || error.message);

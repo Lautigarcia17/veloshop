@@ -3,17 +3,17 @@ import { User } from '../types/interfaces/auth';
 import axios from './axiosConfig'
 
 export function logInRequest(user  : User){
-    return axios.post('/auth/login', user)
+    return axios.post('api/auth/login', user)
 }
 
 export function registerRequest(user : User){
-    return axios.post('/auth/register', user);
+    return axios.post('api/auth/register', user);
 }
 
 export function logoutRequest(){
-    return axios.get('/auth/logout');
+    return axios.post('api/auth/logout');
 }
 
-export function verifyTokenRequest(){
-    return axios.get('auth/verify');
+export function getUserDataRequest(){
+    return axios.get('api/auth/session');
 }

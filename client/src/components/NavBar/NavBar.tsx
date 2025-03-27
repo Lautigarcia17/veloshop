@@ -1,11 +1,26 @@
 import { NavLink } from 'react-router-dom'
 import styles from './NavBar.module.css'
 import logo from '../../assets/icon.png'
+import { useGenericContext } from '../../hooks/useGenericContext';
+import { toastrContext } from '../../context/ToastrContext';
+import { logoutRequest } from '../../api/auth';
+import { isAxiosError } from 'axios';
+import { ERROR_MESSAGES } from '../../constants/errorMessages';
 
 function NavBar() {
+    const { showToastr } = useGenericContext(toastrContext);
+
     const handleLogout = async () => {
-        // await signOut();
-        // toast.success(`You have logged out, see you later !!`, { position: 'top-right', duration: 2000 })
+        try {
+            const responseApi = await logoutRequest();
+            showToastr(responseApi.data.message, "success");
+        } catch (error) {
+            if (isAxiosError(error)) {
+                console.error("Request error:", error.response?.data.message || error.message);
+                showToastr(ERROR_MESSAGES[error.response?.data.code] || "Ocurrió un error inesperado", "error");
+            }
+
+        }
     }
 
     return (

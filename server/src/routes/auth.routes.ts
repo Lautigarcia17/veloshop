@@ -12,7 +12,7 @@ const router = Router();
 router.post('/login', validateSchema(loginSchema), AuthController.login)
 router.post('/register', validateSchema(registerSchema), AuthController.register);
 router.post('/logout', authToken ,AuthController.logout);
-router.get("/verify", AuthController.verifyToken);
+router.get("/session", authToken ,AuthController.getAuthenticatedUser);
 
 
 export default router;

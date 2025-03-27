@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useEffect, useRef, useState } from "react";
+import { createContext, ReactNode, useRef, useState } from "react";
 import { ToastrContextProps, ToastrType } from "../types/type/ToastrContextProps";
 import { ToastrState } from "../types/interfaces/toastrState";
 import Toastr from "../components/Toastr/Toastr";
@@ -37,9 +37,6 @@ export default function ToastrProvider({children} : {children:ReactNode}){
         }
     }
 
-    useEffect(()=>{
-        console.log(toastr.open)
-    },[toastr])
 
     return(
         <toastrContext.Provider value={{showToastr}}>
