@@ -1,0 +1,79 @@
+
+.navbar {
+    background-color: #231f20;
+    color: white;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    z-index: 99;
+    padding: 16px 0px;
+}
+  
+ 
+  .navbarContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+  
+  .navbarLogo {
+    margin-left: 30px;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    background-color: transparent;
+    border: none;
+  }
+  
+
+  .textLogo {
+    font-size: 25px;
+    font-weight: bold;
+    color: #FAEDCD;
+    text-transform: uppercase;
+  }
+  
+  .logo{
+    object-fit: contain;
+    width: 30px;
+    height: 30px;
+  }
+
+
+  .navbarButton {
+    margin-right: 45px; 
+  }
+  
+
+  .btn {
+    background-color: white;
+    color: #1e40af;
+    padding: 7px 30px;
+    border: none;
+    border-radius: 6px;
+    font-size: 18px;
+    font-weight: bold;
+  }
+  
+  .btn:hover {
+    background-color: #e0e7ff;
+  }
+
+  .btnLogout {
+    border: none;
+    background-color: transparent;
+    margin-right: 30px;
+  }
+
+  .btnLogout svg{
+    width: 25px;
+    height: 25px;
+}
+.btnLogout path{
+    fill: rgb(238, 226, 226);
+  }
+  .btnLogout:hover path{
+    fill: wheat;
+  }
+  
