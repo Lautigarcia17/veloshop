@@ -1,5 +1,17 @@
-export interface User{
+
+export interface UserLogin{
     email: string,
     password: string,
-    confirmPassword?: string
+
+}
+
+
+export interface User extends UserLogin{
+    name:string,
+    surname:string
+}
+
+
+export interface UserRegister extends User{
+    confirmPassword: string,
 }

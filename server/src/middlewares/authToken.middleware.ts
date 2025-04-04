@@ -1,5 +1,5 @@
 
-import { auth} from "../config.js";
+import { auth, db} from "../config.js";
 import { ERROR_MESSAGES } from '../constants/errorMessages.js'
 import { NextFunction, Request, Response } from "express";
 
@@ -8,41 +8,29 @@ export async function authToken(req: Request, res: Response, next: NextFunction)
     const { token } = req.cookies;
 
     if (!token) {
-      res.status(401).json({
-        code: "AUTHORIZATION_DENIED",
-        message: "Authorization denied: No token provided",
-      });
+      res.status(401).json({ code: "NO_TOKEN_PROVIDED", message: "No token provided" });
       return;
     }
 
-    const decodedToken = await auth.verifyIdToken(token, true); 
-    if (!decodedToken) {
-      res.status(401).json({
-        code: "INVALID_TOKEN",
-        message: ERROR_MESSAGES.general.INVALID_TOKEN,
-      });
+    const decodedToken = await auth.verifyIdToken(token, true);
+
+    const userDoc = await db.collection("users").doc(decodedToken.uid).get();
+    if (!userDoc.exists) {
+      res.status(404).json({ code: "USER_NOT_FOUND", message: "User not found in database" });
       return;
     }
 
-    const user = await auth.getUser(decodedToken.uid);
-    if (user.tokensValidAfterTime) {
-      const validSince = Math.floor(new Date(user.tokensValidAfterTime).getTime() / 1000);
-      if (decodedToken.auth_time < validSince) {
-        res.status(401).json({
-          code: "TOKEN_EXPIRED",
-          message: ERROR_MESSAGES.general.TOKEN_EXPIRED,
-        });
-        return;
-      }
-    }
+    req.user = userDoc.data();
 
-    req.user = decodedToken;
     next();
-  } catch (error) {
+  } catch (error: any) {
     console.error("Auth Middleware Error:", error);
-    res.status(401).json({
-      code: "INVALID_TOKEN",
-      message: ERROR_MESSAGES.general.INVALID_TOKEN,
-    });
+
+    if (error.code === "auth/id-token-expired") {
+      res.status(401).json({ code: "TOKEN_EXPIRED", message: "Session expired, please log in again" });
+      return;
+    }
+
+    res.status(401).json({ code: "INVALID_TOKEN", message: "Invalid token" });
   }
 }

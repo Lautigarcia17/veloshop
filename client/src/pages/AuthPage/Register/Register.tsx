@@ -10,24 +10,24 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined';
 import { registerSchema } from '../../../schemas/auth.schema';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { User } from '../../../types/interfaces/auth';
+import { User, UserRegister } from '../../../types/interfaces/auth';
 import { registerRequest } from '../../../api/auth';
 import { useGenericContext } from '../../../hooks/useGenericContext';
 import { toastrContext } from '../../../context/ToastrContext';
 import { isAxiosError } from 'axios';
 import { ERROR_MESSAGES } from '../../../constants/errorMessages';
 
-function Register({setShowLogin} : {setShowLogin: React.Dispatch<React.SetStateAction<boolean>>}) {
+function Register({ setShowLogin }: { setShowLogin: React.Dispatch<React.SetStateAction<boolean>> }) {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const { register, formState: { errors }, watch, setValue, reset, handleSubmit } = useForm<User>({
+  const { register, formState: { errors }, watch, setValue, reset, handleSubmit } = useForm<UserRegister>({
     resolver: zodResolver(registerSchema),
     mode: 'onSubmit'
   });
   const [focusConfirmPassword, setFocusConfirmPassword] = useState(false);
   const passwordValue = watch("password");
   const confirmPasswordValue = watch("confirmPassword");
-  const {showToastr} = useGenericContext(toastrContext);
+  const { showToastr } = useGenericContext(toastrContext);
   const theme = createTheme({
     components: {
       MuiInput: {
@@ -88,18 +88,18 @@ function Register({setShowLogin} : {setShowLogin: React.Dispatch<React.SetStateA
   }, [watch("password"), setValue]);
 
   const signUp = async (dataUser: User) => {
-        try {
-          const response = await registerRequest(dataUser);
-          console.log(response)
-          reset();
-          showToastr('Te has registrado', "success");
-        } catch (error) {
-          if (isAxiosError(error)) {
-            console.error("Request error:", error.response?.data.message  || error.message);
-            showToastr(ERROR_MESSAGES[error.response?.data.code ] || "Ocurrió un error inesperado", "error");
-          }
-          
-        }
+    try {
+      const response = await registerRequest(dataUser);
+      console.log(response)
+      reset();
+      showToastr('Te has registrado', "success");
+    } catch (error) {
+      if (isAxiosError(error)) {
+        console.error("Request error:", error.response?.data.message || error.message);
+        showToastr(ERROR_MESSAGES[error.response?.data.code] || "Ocurrió un error inesperado", "error");
+      }
+
+    }
   };
 
   return (
@@ -109,6 +109,40 @@ function Register({setShowLogin} : {setShowLogin: React.Dispatch<React.SetStateA
         <form className={styles.form} onSubmit={handleSubmit(signUp)}>
           <ThemeProvider theme={theme}>
             <div className={styles.divInputs}>
+
+               {/* Name Input */}
+              {/* <div className={styles.inputs}>
+                <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
+                  <AlternateEmailIcon />
+                  <TextField
+                    id="input-with-sx"
+                    label="Name"
+                    variant="standard"
+                    autoComplete='off'
+                    error={!!errors.name}
+                    {...register('name')}
+                  />
+                </Box>
+                <p className={`${styles.messageError} ${errors.name ? styles.visible : ''}`}>{errors.name?.message?.toString()}</p>
+              </div> */}
+
+              {/* Surname Input */}
+              {/* <div className={styles.inputs}>
+                <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
+                  <AlternateEmailIcon />
+                  <TextField
+                    id="input-with-sx"
+                    label="Surname"
+                    variant="standard"
+                    autoComplete='off'
+                    error={!!errors.name}
+                    {...register('surname')}
+                  />
+                </Box>
+                <p className={`${styles.messageError} ${errors.surname ? styles.visible : ''}`}>{errors.surname?.message?.toString()}</p>
+              </div> */}
+
+
               {/* Email Input */}
               <div className={styles.inputs}>
                 <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
@@ -119,7 +153,6 @@ function Register({setShowLogin} : {setShowLogin: React.Dispatch<React.SetStateA
                     variant="standard"
                     autoComplete='off'
                     error={!!errors.email}
-                    // helperText={errors.email?.message?.toString()}
                     {...register('email')}
                   />
                 </Box>
@@ -136,7 +169,6 @@ function Register({setShowLogin} : {setShowLogin: React.Dispatch<React.SetStateA
                     type={showPassword ? "text" : "password"}
                     autoComplete="off"
                     error={!!errors.password}
-                    // helperText={errors.password?.message?.toString()}
                     InputProps={{
                       endAdornment: passwordValue && (
                         <InputAdornment position="end">
@@ -155,7 +187,7 @@ function Register({setShowLogin} : {setShowLogin: React.Dispatch<React.SetStateA
 
               {/* Confirm Password Input */}
               <div className={styles.inputs}>
-                <Box sx={{ display: "flex", alignItems: "flex-end" ,pointerEvents: passwordValue ? "auto" : "none",}} >
+                <Box sx={{ display: "flex", alignItems: "flex-end", pointerEvents: passwordValue ? "auto" : "none", }} >
                   <CheckCircleOutlineOutlinedIcon fontSize="small" />
                   <TextField
                     label="Confirm Password"
@@ -179,12 +211,14 @@ function Register({setShowLogin} : {setShowLogin: React.Dispatch<React.SetStateA
                     }}
                     {...register("confirmPassword")}
                     onFocus={() => setFocusConfirmPassword(true)}
-                    onBlur={() => setFocusConfirmPassword(false)}       
+                    onBlur={() => setFocusConfirmPassword(false)}
                   />
                 </Box>
                 <p className={`${styles.messageError} ${errors.confirmPassword ? styles.visible : ''}`}>{errors.confirmPassword?.message?.toString()}</p>
-                 
+
               </div>
+
+
 
             </div>
 

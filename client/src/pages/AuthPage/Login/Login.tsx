@@ -14,13 +14,13 @@ import { isAxiosError } from 'axios';
 import {ERROR_MESSAGES} from '../../../constants/errorMessages';
 import { useGenericContext } from '../../../hooks/useGenericContext';
 import { toastrContext } from '../../../context/ToastrContext';
-import { User } from '../../../types/interfaces/auth';
+import { User, UserLogin } from '../../../types/interfaces/auth';
 import { useNavigate } from 'react-router-dom';
 
 function Login( {setShowLogin} : {setShowLogin: React.Dispatch<React.SetStateAction<boolean>>}) {
   const [showPassword, setShowPassword] = useState(false);
   const form: any = useRef(null);
-  const { register, formState: { errors }, watch, reset, handleSubmit } = useForm<User>({
+  const { register, formState: { errors }, watch, reset, handleSubmit } = useForm<UserLogin>({
     resolver: zodResolver(loginSchema),
     mode: 'onSubmit'
   });
@@ -82,7 +82,7 @@ function Login( {setShowLogin} : {setShowLogin: React.Dispatch<React.SetStateAct
   });
 
   
-  const logIn = async (dataUser: User) => {
+  const logIn = async (dataUser: UserLogin) => {
     try {
       const responseApi = await logInRequest(dataUser);
       console.log(responseApi);

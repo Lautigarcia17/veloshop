@@ -8,7 +8,7 @@ export class AuthController {
 
     static async register(req: Request, res: Response): Promise<void> {
         try {
-            const { email, password, rol } = req.body;
+            const { email, password, rol, name, surname } = req.body;
 
             const userAuth = await auth.getUserByEmail(email).catch(() => null);
             if (userAuth) {
@@ -31,6 +31,8 @@ export class AuthController {
                 id: localId,
                 email: email ?? '',
                 rol: userRol,
+                name: name,
+                surname: surname
             };
 
             try {
@@ -40,17 +42,6 @@ export class AuthController {
                 res.status(500).json({
                     code: 'DB_SAVE_FAILED',
                     message: 'Error guardando el usuario en la base de datos.',
-                });
-                return;
-            }
-
-            try {
-                await auth.setCustomUserClaims(newUser.id, { rol: userRol });
-            } catch (error) {
-                await auth.deleteUser(newUser.id);
-                res.status(500).json({
-                    code: 'SET_CUSTOM_CLAIMS_FAILED',
-                    message: ERROR_MESSAGES.general.SET_CUSTOM_CLAIMS_FAILED,
                 });
                 return;
             }
@@ -97,10 +88,6 @@ export class AuthController {
 
             const userDoc = await db.collection("users").doc(localId).get();
             const rol = userDoc.exists ? userDoc.data()?.rol : "customer";
-
-            if (decodedToken.rol !== rol) {
-                await auth.setCustomUserClaims(localId, { rol });
-            }
 
             res.cookie("token", idToken, {
                 httpOnly: true,
@@ -169,9 +156,11 @@ export class AuthController {
 
     static async getAuthenticatedUser(req: Request, res: Response): Promise<void> {
         res.json({
-            id: req.user?.uid,
+            id: req.user?.id,
             email: req.user?.email,
-            role: req.user?.rol ?? "customer"
+            role: req.user?.rol ?? "customer",
+            name: req.user?.name,
+            surname: req.user?.surname
           });
     }
 

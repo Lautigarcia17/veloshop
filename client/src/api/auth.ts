@@ -1,8 +1,8 @@
 
-import { User } from '../types/interfaces/auth';
+import { User, UserLogin } from '../types/interfaces/auth';
 import axios from './axiosConfig'
 
-export function logInRequest(user  : User){
+export function logInRequest(user  : UserLogin){
     return axios.post('api/auth/login', user)
 }
 
