@@ -11,13 +11,13 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { loginSchema } from '../../../schemas/auth.schema';
 import { logInRequest } from '../../../api/auth';
 import { isAxiosError } from 'axios';
-import {ERROR_MESSAGES} from '../../../constants/errorMessages';
+import { ERROR_MESSAGES } from '../../../constants/errorMessages';
 import { useGenericContext } from '../../../hooks/useGenericContext';
 import { toastrContext } from '../../../context/ToastrContext';
-import { User, UserLogin } from '../../../types/interfaces/auth';
+import {  UserLogin } from '../../../types/interfaces/auth';
 import { useNavigate } from 'react-router-dom';
 
-function Login( {setShowLogin} : {setShowLogin: React.Dispatch<React.SetStateAction<boolean>>}) {
+function Login({ setShowLogin }: { setShowLogin: React.Dispatch<React.SetStateAction<boolean>> }) {
   const [showPassword, setShowPassword] = useState(false);
   const form: any = useRef(null);
   const { register, formState: { errors }, watch, reset, handleSubmit } = useForm<UserLogin>({
@@ -25,7 +25,7 @@ function Login( {setShowLogin} : {setShowLogin: React.Dispatch<React.SetStateAct
     mode: 'onSubmit'
   });
   const passwordValue = watch("password");
-  const {showToastr} = useGenericContext(toastrContext);
+  const { showToastr } = useGenericContext(toastrContext);
   const navigate = useNavigate();
 
   const theme = createTheme({
@@ -81,7 +81,7 @@ function Login( {setShowLogin} : {setShowLogin: React.Dispatch<React.SetStateAct
     },
   });
 
-  
+
   const logIn = async (dataUser: UserLogin) => {
     try {
       const responseApi = await logInRequest(dataUser);
@@ -91,10 +91,10 @@ function Login( {setShowLogin} : {setShowLogin: React.Dispatch<React.SetStateAct
       navigate('/home')
     } catch (error) {
       if (isAxiosError(error)) {
-        console.error("Request error:", error.response?.data.message  || error.message);
-        showToastr(ERROR_MESSAGES[error.response?.data.code ] || "Ocurrió un error inesperado", "error");
+        console.error("Request error:", error.response?.data.message || error.message);
+        showToastr(ERROR_MESSAGES[error.response?.data.code] || "Ocurrió un error inesperado", "error");
       }
-      
+
     }
   };
 
@@ -103,8 +103,8 @@ function Login( {setShowLogin} : {setShowLogin: React.Dispatch<React.SetStateAct
       <h1 className={styles.titleAuth}>LOGIN</h1>
       <div className={styles.contentCard}>
         <form ref={form} className={styles.form} onSubmit={handleSubmit(logIn)}>
-          <ThemeProvider theme={theme}>
-            <div className={styles.divInputs}>
+          <div className={styles.divInputs}>
+            <ThemeProvider theme={theme}>
               {/* Email Input */}
               <div className={styles.inputs}>
                 <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
@@ -120,7 +120,7 @@ function Login( {setShowLogin} : {setShowLogin: React.Dispatch<React.SetStateAct
                 </Box>
                 <p className={`${styles.messageError} ${errors.email ? styles.visible : ''}`}>{errors.email?.message?.toString()}</p>
               </div>
-              
+
               {/* Password Input */}
               <div className={styles.inputs}>
                 <Box sx={{ display: "flex", alignItems: "flex-end" }}>
@@ -146,28 +146,32 @@ function Login( {setShowLogin} : {setShowLogin: React.Dispatch<React.SetStateAct
                 <p className={`${styles.messageError} ${errors.password ? styles.visible : ''}`}>{errors.password?.message?.toString()}</p>
 
               </div>
-            </div>
 
-          </ThemeProvider>
-          <Button type='submit' size='large' variant="contained" startIcon={<DoubleArrowIcon />} disabled={false} sx={{
-            backgroundColor: '#5e4457',
-            color: '#F0EBD8',
-            fontWeight: 700,
-            gap: '10px',
-            fontSize: '16px',
-            fontFamily: 'Ubuntu',
-            '&:hover': {
-              backgroundColor: '#755B71',
-            },
-            '&.Mui-disabled': {
+            </ThemeProvider>
+          </div>
+
+          <div className={styles.actions}>
+            <Button type='submit' size='large' variant="contained" startIcon={<DoubleArrowIcon />} disabled={false} sx={{
+              backgroundColor: '#5e4457',
+              color: '#F0EBD8',
+              fontWeight: 700,
+              gap: '10px',
+              fontSize: '16px',
+              fontFamily: 'Ubuntu',
+              '&:hover': {
+                backgroundColor: '#755B71',
+              },
+              '&.Mui-disabled': {
                 backgroundColor: 'rgba(96, 73, 90, 0.3)', // Override the default disabled black background
                 color: 'rgba(240, 235, 216, 0.5)'
-            },
-          }}>
-            Log in
-          </Button>
-          
-          <h1 className={styles.textRegister}>Don't have an account? <button type='button' onClick={()=> setShowLogin(false)}>Sign Up</button></h1>
+              },
+            }}>
+              Log in
+            </Button>
+
+            <h1 className={styles.textRegister}>Don't have an account? <button type='button' onClick={() => setShowLogin(false)}>Sign Up</button></h1>
+          </div>
+
         </form>
       </div>
     </>

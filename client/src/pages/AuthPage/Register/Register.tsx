@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect,  useState } from 'react';
 import styles from '../../../pages/AuthPage/AuthPage.module.css';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { Box, TextField, Button, InputAdornment, IconButton } from '@mui/material';
@@ -107,11 +107,11 @@ function Register({ setShowLogin }: { setShowLogin: React.Dispatch<React.SetStat
       <h1 className={styles.titleAuth}>SIGN UP</h1>
       <div className={styles.contentCard}>
         <form className={styles.form} onSubmit={handleSubmit(signUp)}>
-          <ThemeProvider theme={theme}>
-            <div className={styles.divInputs}>
+          <div className={styles.divInputs}>
+            <ThemeProvider theme={theme}>
 
-               {/* Name Input */}
-              {/* <div className={styles.inputs}>
+              {/* Name Input */}
+              <div className={styles.inputs}>
                 <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
                   <AlternateEmailIcon />
                   <TextField
@@ -124,10 +124,10 @@ function Register({ setShowLogin }: { setShowLogin: React.Dispatch<React.SetStat
                   />
                 </Box>
                 <p className={`${styles.messageError} ${errors.name ? styles.visible : ''}`}>{errors.name?.message?.toString()}</p>
-              </div> */}
+              </div>
 
               {/* Surname Input */}
-              {/* <div className={styles.inputs}>
+              <div className={styles.inputs}>
                 <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
                   <AlternateEmailIcon />
                   <TextField
@@ -140,7 +140,7 @@ function Register({ setShowLogin }: { setShowLogin: React.Dispatch<React.SetStat
                   />
                 </Box>
                 <p className={`${styles.messageError} ${errors.surname ? styles.visible : ''}`}>{errors.surname?.message?.toString()}</p>
-              </div> */}
+              </div>
 
 
               {/* Email Input */}
@@ -220,24 +220,30 @@ function Register({ setShowLogin }: { setShowLogin: React.Dispatch<React.SetStat
 
 
 
-            </div>
 
-          </ThemeProvider>
-          <Button type='submit' size='large' variant="contained" startIcon={<DoubleArrowIcon />} sx={{
-            backgroundColor: '#60495A',
-            color: '#F0EBD8',
-            fontWeight: 700,
-            gap: '10px',
-            fontSize: '16px',
-            fontFamily: 'Ubuntu',
-            '&:hover': {
-              backgroundColor: '#755B71',
-            },
-          }}>
-            Sign Up
-          </Button>
+            </ThemeProvider>
+          </div>
 
-          <h1 className={styles.textRegister}>Do you have an account? <button type='button' onClick={() => setShowLogin(true)}>Log In</button></h1>
+          <div className={styles.actions}>
+
+
+            <Button type='submit' size='large' variant="contained" startIcon={<DoubleArrowIcon />} sx={{
+              backgroundColor: '#60495A',
+              color: '#F0EBD8',
+              fontWeight: 700,
+              gap: '10px',
+              fontSize: '16px',
+              fontFamily: 'Ubuntu',
+              '&:hover': {
+                backgroundColor: '#755B71',
+              },
+            }}>
+              Sign Up
+            </Button>
+
+            <h1 className={styles.textRegister}>Do you have an account? <button type='button' onClick={() => setShowLogin(true)}>Log In</button></h1>
+          </div>
+
         </form>
       </div>
     </>

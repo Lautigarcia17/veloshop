@@ -1,5 +1,4 @@
-
-.container{
+.container {
     height: 100%;
     width: 100%;
 }
@@ -12,16 +11,16 @@
     align-items: center;
     justify-content: center;
 }
-  
-  
+
+
 .card {
-    width: 400px;
-    height: 500px;
+    width: 425px;
+    height: 560px;
     background-color: #231f20;
     padding: 30px;
     border-radius: 13px;
     border: 3px solid #343737;
-    
+
 }
 
 .contentCard {
@@ -45,14 +44,14 @@
     text-align: center;
     flex-direction: column;
     align-items: center;
-    justify-content: space-evenly;
+    justify-content: space-around;
 
 }
 
 .divInputs {
     display: flex;
     flex-direction: column;
-    gap: 30px;
+    gap: 20px;
 }
 
 .inputs {
@@ -81,16 +80,17 @@
 
 
 .MuiFormHelperText-root p {
-    min-height: 100px !important;  /* Asegura un espacio mínimo para el error */
-  }
+    min-height: 100px !important;
+    /* Asegura un espacio mínimo para el error */
+}
 
-.textRegister{
+.textRegister {
     font-size: 12px;
     color: white;
     font-weight: 400;
 }
 
-.textRegister button{
+.textRegister button {
     font-weight: 700;
     background-color: transparent;
     border: none;
@@ -101,24 +101,32 @@
     border-bottom: 2px solid transparent;
 }
 
-.textRegister button:hover{
+.textRegister button:hover {
     color: #FAEDCD;
     border-bottom: 2px solid #FAEDCD;
 }
 
 
-    
-  .messageError{
+
+.messageError {
     font-size: 13px;
     color: red;
     margin: 0;
     height: 0px;
     visibility: visible;
     margin-top: 4px;
-  }
-  .messageError.visible{
+}
+
+.messageError.visible {
     visibility: visible;
-  }
+}
+
+.actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
 
 @media (max-width: 1200px) {
     .card {
